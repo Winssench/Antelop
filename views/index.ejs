@@ -1,0 +1,136 @@
+<%- include('_header') -%>
+
+    
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Dropdown button
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" onclick="weight()">weight</a>
+            <a class="dropdown-item" onclick="height()">height</a>
+    
+        </div>
+  </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-vody">
+
+                    <canvas id="myChart" width="200" height="60%"></canvas>
+                    <canvas id="labelChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+
+    <script>
+                
+                var data =  [            
+                            ];
+               
+                var africa = 0;
+                var asia = 0;
+                <% var test =  antelData %>;
+                
+                
+                <% var _count %>;
+                var labels = [];
+                var weightData = [];
+                var heightData = [];
+                
+                <% for (_count = 0; _count < test.length; _count++) { %>
+                   
+                    labels.push('<%- test[_count].name -%>');
+                    weightData.push('<%- test[_count].weight -%>');
+                    heightData.push('<%- test[_count].height -%>');
+                   
+                    <% if ( test[_count].continent === 'Africa'  ) { %>
+                   
+                        africa = africa +1;
+                    <% }  %>
+                    <% if ( test[_count].continent === 'Asia' ) { %>
+                        asia = asia +1;
+                    <% }  %>
+                  
+                <% } %> //
+              
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+
+                        
+                        datasets: [{
+                            label: 'Choose data',
+                            data: data,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+                
+                var ctxP = document.getElementById("labelChart").getContext('2d');
+                var myPieChart = new Chart(ctxP, {
+                    type: 'doughnut',
+                    data: {
+                    labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+                    datasets: [
+                        {
+                        label: "Population (millions)",
+                        backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+                        data: [africa,asia,0,0,0]
+                        }
+                    ]
+                    },
+                    options: {
+                    title: {
+                        display: true,
+                        text: 'Predicted world population (millions) in 2050'
+                    }
+                    }
+                });
+               
+                function weight()
+                {
+                    myChart.data.datasets[0].label = "Antellope Weight";
+                    myChart.data.datasets[0].data = weightData;
+                            myChart.update();
+                 
+                }
+                function height()
+                {
+                    myChart.data.datasets[0].label = "Antellope Height";
+                    myChart.data.datasets[0].data =  heightData;
+                            myChart.update();
+
+                }
+                
+    </script>
+
+<%- include('_footer') -%>
